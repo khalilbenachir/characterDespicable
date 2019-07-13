@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/character.dart';
 import '../stylesGuide.dart';
+import 'character_screen_detail.dart';
 
 class CharacterWidget extends StatelessWidget {
   @override
@@ -8,42 +9,53 @@ class CharacterWidget extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return Stack(
-      children: <Widget>[
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: ClipPath(
-            clipper: CharacterCardBackgroundClip(),
-            child: Container(
-              height: 0.6 * screenHeight,
-              width: 0.9 * screenWidth,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: characters[0].colors,
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft)),
+    return InkWell(
+      onTap:(){ Navigator.push(context, PageRouteBuilder(
+          transitionDuration: Duration(milliseconds: 350),
+          pageBuilder: (context,_,__)=> CharacterScreenDetail(character:characters[1])));},
+      child: Stack(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: ClipPath(
+              clipper: CharacterCardBackgroundClip(),
+              child: Hero(
+                tag: "background-${characters[1].name}",
+                child: Container(
+                  height: 0.6 * screenHeight,
+                  width: 0.9 * screenWidth,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: characters[1].colors,
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft)),
+                ),
+              ),
             ),
           ),
-        ),
-        Align(
-          alignment: Alignment(0, -0.511),
-          child: Image.asset(
-            characters[0].imagePath,
-            height: screenHeight * 0.55,
+          Align(
+            alignment: Alignment(0, -0.511),
+            child: Hero(
+              tag: "image-${characters[1].imagePath}",
+              child: Image.asset(
+                characters[1].imagePath,
+                height: screenHeight * 0.55,
+              ),
+            ),
           ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 15,right: 90),
-            child: RichText(text: TextSpan(children: [
-              TextSpan(text: characters[0].name,style: AppTheme.heading),
-              TextSpan(text: '\n',),
-              TextSpan(text: "tap to read more",style: AppTheme.subheading),
-            ])),
-          ),
-        )
-      ],
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 15,right: 90),
+              child: RichText(text: TextSpan(children: [
+                TextSpan(text: characters[1].name,style: AppTheme.heading),
+                TextSpan(text: '\n',),
+                TextSpan(text: "tap to read more",style: AppTheme.subheading),
+              ])),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
